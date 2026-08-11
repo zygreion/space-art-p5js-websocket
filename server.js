@@ -1,25 +1,30 @@
-// Server configuration
 const express = require("express");
+const http = require("http"); // 1. Tambahkan modul http bawaan Node.js
+const path = require("path");
+const socket = require("socket.io");
+
 const app = express();
 
-app.use(express.static("./public"));
+// 2. Buat HTTP server dari Express app
+const server = http.createServer(app);
 
-const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => {
-  console.log("Server running on port:", PORT);
+// 3. Kaitkan Socket.IO ke HTTP server dengan konfigurasi CORS
+const io = socket(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
 });
 
-// Socket Configuration
-const socket = require("socket.io");
-const io = socket(server);
+// Menyajikan file statis dari folder public
+app.use(express.static(path.join(__dirname, "public")));
 
-io.sockets.on("connection", newConnection);
+// Socket.IO Connection Event
+io.on("connection", newConnection);
 
-// Sockets connection callback
 function newConnection(socket) {
   console.log("New Connection:", socket.id);
 
-  // Server receiving draw event, then broadcast again to all subscriber
   socket.on("draw", drawMsg);
 
   function drawMsg(data) {
@@ -27,3 +32,9 @@ function newConnection(socket) {
     console.log("Received base64 dataURL:", data.type);
   }
 }
+
+// 4. Jalankan HTTP server (bukan app.listen)
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log("Server running on port:", PORT);
+});
