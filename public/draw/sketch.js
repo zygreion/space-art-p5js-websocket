@@ -81,7 +81,8 @@ async function setup() {
   canvas.elt.addEventListener("touchmove", handleMove);
 
   // Sockets connection
-  socket = io();
+  // socket = io();
+  connectWebSocket();
 
   // First render
   resetObject();
@@ -186,6 +187,8 @@ function changeBrushSize(value) {
 
 // Emit draw event to server
 function submit() {
+  if (!socket || socket.readyState !== WebSocket.OPEN) return;
+
   const imageData = drawGfx.elt.toDataURL("image/png");
 
   const data = {
@@ -193,7 +196,8 @@ function submit() {
     imageData: imageData,
   };
 
-  socket.emit("draw", data);
+  // Kirim data sebagai JSON String murni
+  socket.send(JSON.stringify(data));
 }
 
 // Check if CSS pointer is coarse (touchscreen) or solid (mouse)
