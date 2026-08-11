@@ -17,9 +17,6 @@ let dummyObjectDatas = [
   { type: "saturn", imageData: "../assets/colored/saturn_c.png" },
 ];
 
-// Socket configuration
-let socket;
-
 async function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
