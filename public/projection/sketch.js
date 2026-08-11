@@ -36,8 +36,9 @@ async function setup() {
   generateStars(100);
 
   // Sockets connection
-  socket = io();
-  socket.on("draw", newDrawing);
+  // socket = io();
+  // socket.on("draw", newDrawing);
+  connectWebSocket();
 
   // Dummy objects
   for (const data of dummyObjectDatas) {

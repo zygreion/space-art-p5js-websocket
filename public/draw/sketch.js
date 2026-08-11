@@ -32,9 +32,6 @@ const colorTitle = document.getElementById("color-title");
 const brushSizeTitle = document.getElementById("brush-size-title");
 const brushSizeInput = document.getElementById("brush-size-input");
 
-// Socket configuration
-let socket = null;
-
 // Other configurations
 const CURSOR_OPACITY = 100;
 const GRID_SIZE = 10;
