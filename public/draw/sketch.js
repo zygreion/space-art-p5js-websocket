@@ -77,9 +77,10 @@ async function setup() {
   canvas.elt.addEventListener("touchcancel", handleCancel);
   canvas.elt.addEventListener("touchmove", handleMove);
 
-  // Sockets connection
-  // socket = io();
-  connectWebSocket();
+  // Inisialisasi socket (halaman draw jarang menerima pesan, jadi callback bisa dikosongkan atau diisi log)
+  initWebSocket((data) => {
+    console.log("Pesan diterima di draw:", data);
+  });
 
   // First render
   resetObject();
@@ -184,8 +185,6 @@ function changeBrushSize(value) {
 
 // Emit draw event to server
 function submit() {
-  if (!socket || socket.readyState !== WebSocket.OPEN) return;
-
   const imageData = drawGfx.elt.toDataURL("image/png");
 
   const data = {
@@ -193,8 +192,8 @@ function submit() {
     imageData: imageData,
   };
 
-  // Kirim data sebagai JSON String murni
-  socket.send(JSON.stringify(data));
+  // Kirim menggunakan fungsi dari socket.js
+  sendWebSocketMessage(data);
 }
 
 // Check if CSS pointer is coarse (touchscreen) or solid (mouse)

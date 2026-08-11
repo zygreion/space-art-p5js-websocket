@@ -32,10 +32,12 @@ async function setup() {
 
   generateStars(100);
 
-  // Sockets connection
-  // socket = io();
-  // socket.on("draw", newDrawing);
-  connectWebSocket();
+  // Inisialisasi socket dan langsung masukkan fungsi untuk menangani gambar masuk
+  initWebSocket(async (data) => {
+    if (data && data.imageData) {
+      await newDrawing(data);
+    }
+  });
 
   // Dummy objects
   for (const data of dummyObjectDatas) {
